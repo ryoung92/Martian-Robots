@@ -13,34 +13,49 @@ namespace MartianRobots
         {
             using var reader = Console.In;
             string? first = ReadNonEmptyLine(reader);
-            if (first == null) return;
+            if (first is null) return;
 
+            RunProgram(reader, first);
+        }
+
+        private static void RunProgram(TextReader reader, string first)
+        {
+            //set up world
             var (maxX, maxY) = ParseGrid(first);
             var world = new World(maxX, maxY);
 
             while (true)
-            {
-                string? posLine = ReadNonEmptyLine(reader);
-                if (posLine == null) break;
+            {   
+                //check line from txt file
+                string? positionLine = ReadNonEmptyLine(reader);
+                if (positionLine == null) break;
 
-                var (x, y, o) = ParsePosition(posLine);
+                //parse the valid line from txt file
+                var (x, y, o) = ParsePosition(positionLine);
 
-                string? instrLine = ReadNonEmptyLine(reader);
-                if (instrLine == null) break;
+                string? instructionLine = ReadNonEmptyLine(reader);
+                if (instructionLine == null) break;
 
                 var robot = new Robot(x, y, o);
 
-                foreach (char c in instrLine.Trim())
+                //execute instructions from line
+                ExecuteInstructions(instructionLine, robot, world);
+
+                Console.WriteLine(robot);
+            }
+
+            static void ExecuteInstructions(string instructions, Robot robot, World world)
+            {
+                foreach (char c in instructions.Trim())
                 {
                     if (!CommandRegistry.TryGet(c, out var cmd))
-                        continue; // Unknown commands are ignored (future-proofing)
+                        continue; // Ignore unknown commands
 
                     cmd.Execute(robot, world);
 
-                    if (robot.IsLost) break; // Stop processing this robot’s instructions
+                    if (robot.IsLost)
+                        break; // Stop if robot is lost
                 }
-
-                Console.WriteLine(robot);
             }
         }
 

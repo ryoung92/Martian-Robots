@@ -12,6 +12,6 @@ namespace MartianRobots
             // Add new commands later: e.g. ['B'] = new BackwardCommand()
         };
 
-        public static bool TryGet(char c, out IRobotCommand cmd) => _map.TryGetValue(c, out cmd);
+        public static bool TryGet(char c, out IRobotCommand command) => _map.TryGetValue(c, out command);
     }
 }
