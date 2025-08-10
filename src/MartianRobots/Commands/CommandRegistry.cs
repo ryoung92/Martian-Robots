@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace MartianRobots
 {
-    static class CommandRegistry
+    internal static class CommandRegistry
     {
         private static readonly Dictionary<char, IRobotCommand> _map = new()
         {

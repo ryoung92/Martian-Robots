@@ -12,10 +12,10 @@ namespace MartianRobots
         public static void Main()
         {
             using var reader = Console.In;
-            string? first = ReadNonEmptyLine(reader);
-            if (first is null) return;
+            string? firstLine = ReadNonEmptyLine(reader);
+            if (firstLine is null) return;
 
-            RunProgram(reader, first);
+            RunProgram(reader, firstLine);
         }
 
         private static void RunProgram(TextReader reader, string first)
@@ -48,10 +48,10 @@ namespace MartianRobots
             {
                 foreach (char c in instructions.Trim())
                 {
-                    if (!CommandRegistry.TryGet(c, out var cmd))
+                    if (!CommandRegistry.TryGet(c, out var command))
                         continue; // Ignore unknown commands
 
-                    cmd.Execute(robot, world);
+                    command.Execute(robot, world);
 
                     if (robot.IsLost)
                         break; // Stop if robot is lost
